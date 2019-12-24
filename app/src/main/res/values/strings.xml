@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">YoutubeParcer</string>
+    <string name="title">This title</string>
+    <string name="playlists">Playlists</string>
+    <string name="no_internet">No Internet Connection</string>
+    <string name="try_again">Try again</string>
+    <string name="exemple_title">Emotional Well-being / Healing Practices for Children</string>
+    <string name="exemple_descrition">In this series, we break down the impact of displacement,
+        instability, violence, and trauma in children, and offer exercises to support children in their healing journey.</string>
 </resources>
