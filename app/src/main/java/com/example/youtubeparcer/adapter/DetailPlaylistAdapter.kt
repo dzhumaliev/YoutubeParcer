@@ -25,7 +25,7 @@ class DetailPlaylistAdapter(val function: (ItemsItem) -> Unit) :
     }
 
     override fun onBindViewHolder(holder: YoutubeViewHolder, position: Int) {
-        holder.bind(list[position], function)
+        holder.bind(list[position])
     }
 
     fun updateData(newList: List<ItemsItem>?) {
@@ -34,21 +34,23 @@ class DetailPlaylistAdapter(val function: (ItemsItem) -> Unit) :
     }
 
 
-    class YoutubeViewHolder(itemView: View, function: (ItemsItem) -> Unit) :
+    class YoutubeViewHolder(itemView: View, val function: (ItemsItem) -> Unit) :
         RecyclerView.ViewHolder(itemView) {
 
         private var image: ImageView? = null
         private var title: TextView? = null
         private var description: TextView? = null
 
+
         init {
             image = itemView.findViewById(R.id.image)
             title = itemView.findViewById(R.id.title)
             description = itemView.findViewById(R.id.description)
 
+
         }
 
-        fun bind(item: ItemsItem, function: (ItemsItem) -> Unit) {
+        fun bind(item: ItemsItem) {
             Picasso
                 .get()
                 .load(item.snippet?.thumbnails?.default?.url)
@@ -61,6 +63,9 @@ class DetailPlaylistAdapter(val function: (ItemsItem) -> Unit) :
             itemView.setOnClickListener {
                 function(item)
             }
+
+
+
 
         }
     }

@@ -7,7 +7,12 @@ import com.example.youtubeparcer.repository.MainRepository
 class DetailVideoViewModel : ViewModel() {
 
 
-    fun getPlaylistDataOne() : LiveData<PlaylistModel> {
+//    fun getPlaylistDataOne() : LiveData<PlaylistModel> {
+//        return MainRepository.fetchYoutubePlaylistData()
+//    }
+
+    fun getPlaylistData() : LiveData<PlaylistModel>?{
         return MainRepository.fetchYoutubePlaylistData()
+
     }
 }

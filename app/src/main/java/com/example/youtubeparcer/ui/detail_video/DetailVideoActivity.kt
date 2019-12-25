@@ -1,8 +1,5 @@
 package com.example.youtubeparcer.ui.detail_video
 
-import android.content.Context
-import android.net.ConnectivityManager
-import android.net.NetworkInfo
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -26,7 +23,7 @@ class DetailVideoActivity : AppCompatActivity() {
     }
 
     private fun fetchVideoDetailVideo() {
-        val data = viewModel?.getPlaylistDataOne()
+        val data = viewModel?.getPlaylistData()
         data?.observe(this, Observer<PlaylistModel> {
             val model: PlaylistModel? = data.value
             when {
@@ -35,6 +32,7 @@ class DetailVideoActivity : AppCompatActivity() {
                 }
             }
         })
+
     }
 
     private fun updateAdapterData(list: PlaylistModel?) {

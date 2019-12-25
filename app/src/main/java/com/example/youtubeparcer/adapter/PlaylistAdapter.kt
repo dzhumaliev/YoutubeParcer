@@ -10,7 +10,8 @@ import com.example.youtubeparcer.R
 import com.example.youtubeparcer.model.ItemsItem
 import com.squareup.picasso.Picasso
 
-class PlaylistAdapter(val function: (ItemsItem) -> Unit) : RecyclerView.Adapter<PlaylistAdapter.YoutubeViewHolder>() {
+class PlaylistAdapter(val function: (ItemsItem) -> Unit) :
+    RecyclerView.Adapter<PlaylistAdapter.YoutubeViewHolder>() {
 
     private var list = mutableListOf<ItemsItem>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): YoutubeViewHolder {
@@ -24,7 +25,7 @@ class PlaylistAdapter(val function: (ItemsItem) -> Unit) : RecyclerView.Adapter<
     }
 
     override fun onBindViewHolder(holder: YoutubeViewHolder, position: Int) {
-        holder.bind(list[position], function)
+        holder.bind(list[position])
     }
 
     fun updateData(newList: List<ItemsItem>?) {
@@ -33,20 +34,23 @@ class PlaylistAdapter(val function: (ItemsItem) -> Unit) : RecyclerView.Adapter<
     }
 
 
-    class YoutubeViewHolder(itemView: View, function: (ItemsItem) -> Unit) : RecyclerView.ViewHolder(itemView) {
+    class YoutubeViewHolder(itemView: View, val function: (ItemsItem) -> Unit) :
+        RecyclerView.ViewHolder(itemView) {
 
         private var image: ImageView? = null
         private var title: TextView? = null
         private var description: TextView? = null
+
 
         init {
             image = itemView.findViewById(R.id.image)
             title = itemView.findViewById(R.id.title)
             description = itemView.findViewById(R.id.description)
 
+
         }
 
-        fun bind(item: ItemsItem, function: (ItemsItem) -> Unit) {
+        fun bind(item: ItemsItem) {
             Picasso
                 .get()
                 .load(item.snippet?.thumbnails?.default?.url)
@@ -55,7 +59,7 @@ class PlaylistAdapter(val function: (ItemsItem) -> Unit) : RecyclerView.Adapter<
                 .into(image)
 
             title?.text = item.snippet.title
-            description?.text = item.contentDetails?.itemCount
+            description?.text = item.contentDetails?.itemCount + " видео"
             itemView.setOnClickListener {
                 function(item)
             }

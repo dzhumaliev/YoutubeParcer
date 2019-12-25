@@ -22,6 +22,7 @@ class DetailPlayListActivity : AppCompatActivity() {
     private var id: String? = null
     private var title: String? = null
     private var description: String? = null
+    private var itemCount: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail_play_list)
@@ -36,6 +37,10 @@ class DetailPlayListActivity : AppCompatActivity() {
         id = intent?.getStringExtra("id")
         title = intent?.getStringExtra("title")
         description = intent?.getStringExtra("etag")
+        itemCount = intent?.getStringExtra("itemCount")
+
+        tv_title.text = title
+        tv_item_count.text = itemCount
     }
 
     private fun initAdapter() {
@@ -58,10 +63,11 @@ class DetailPlayListActivity : AppCompatActivity() {
                 updateViews(data.value!!)
             }
         })
+
     }
 
     private fun updateViews(it: DetailPlaylistModel) {
-
         adapter.updateData(it.items)
     }
+
 }

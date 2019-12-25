@@ -16,13 +16,13 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
-    private var viewModel: DetailVideoViewModel? = null
+    private var viewModel: MainViewModel? = null
     private var adapter: PlaylistAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        viewModel = ViewModelProviders.of(this).get(DetailVideoViewModel::class.java)
+        viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
         initAdapter()
         fetchPlaylist()
 
@@ -42,12 +42,13 @@ class MainActivity : AppCompatActivity() {
         intent.putExtra("title", item.snippet.title)
         intent.putExtra("channelId", item.snippet.channelId)
         intent.putExtra("etag", item.etag)
+        intent.putExtra("itemCount", item.contentDetails.itemCount + " видео")
         startActivity(intent)
     }
 
 
     private fun fetchPlaylist() {
-        val data = viewModel?.getPlaylistDataOne()
+        val data = viewModel?.getPlaylistData()
         data?.observe(this, Observer<PlaylistModel> {
             val model: PlaylistModel? = data.value
             when {
