@@ -17,7 +17,7 @@ class MainRepository {
 
     companion object {
 
-        val channel = "UCsOoQeBWPnfWBYAwmO795zg"
+        val channel = "UCCmFDKAKbiTJg9NWsGk5nEA"
         val apiKey = "AIzaSyCWK-EoCHecYMMFAvl-DI5iegR9s1WW20Y"
         val part = "snippet,contentDetails"
         val maxResult = "50"
