@@ -50,13 +50,19 @@ dependencies {
     //picasso
     implementation 'com.squareup.picasso:picasso:2.71828'
 
-
-    implementation 'com.google.android.material:material:1.2.0-alpha02'
-
-
+    //material design
+    implementation 'com.google.android.material:material:1.2.0-alpha03'
     implementation "androidx.coordinatorlayout:coordinatorlayout:1.1.0"
-
-
     implementation "androidx.cardview:cardview:1.0.0"
 
+    //video player
+    implementation 'com.google.android.exoplayer:exoplayer:2.8.4'
+
+
+    //for all video's links
+    implementation 'com.github.HaarigerHarald:android-youtubeExtractor:1.9.0'
+
+
+    //LayoutManagerGroup
+    implementation 'com.github.DingMouRen:LayoutManagerGroup:1e6f4f96eb'
 }

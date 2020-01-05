@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.example.youtubeparcer.api.RetrofitClient
 import com.example.youtubeparcer.api.YoutubeApi
 import com.example.youtubeparcer.model.DetailPlaylistModel
+import com.example.youtubeparcer.model.DetailVideoModel
 import com.example.youtubeparcer.model.PlaylistModel
 import retrofit2.Call
 import retrofit2.Callback
@@ -16,7 +17,7 @@ class MainRepository {
 
     companion object {
 
-        val channel = "UCCmFDKAKbiTJg9NWsGk5nEA"
+        val channel = "UCsOoQeBWPnfWBYAwmO795zg"
         val apiKey = "AIzaSyCWK-EoCHecYMMFAvl-DI5iegR9s1WW20Y"
         val part = "snippet,contentDetails"
         val maxResult = "50"
@@ -43,7 +44,7 @@ class MainRepository {
             return data
         }
 
-        fun fetchYoutubeDetailPlaylistData(playlistId: String): LiveData<DetailPlaylistModel> {
+        fun fetchYoutubeDetailPlaylistData(playlistId: String): LiveData<DetailPlaylistModel>? {
             apiService = RetrofitClient.create()
             val data = MutableLiveData<DetailPlaylistModel>()
             apiService.getDetailPlaylist(part, apiKey, playlistId, maxResult).enqueue(object :
@@ -62,6 +63,28 @@ class MainRepository {
             return data
 
         }
+        fun fetchVideoData(videoId: String): LiveData<DetailVideoModel>? {
+            apiService = RetrofitClient.create()
+            val data = MutableLiveData<DetailVideoModel>()
+            apiService.getDetailVideo(apiKey, part,videoId).enqueue(object :
+            Callback<DetailVideoModel>{
+                override fun onFailure(call: Call<DetailVideoModel>, t: Throwable) {
+                    data.value = null
+                }
+
+                override fun onResponse(
+                    call: Call<DetailVideoModel>,
+                    response: Response<DetailVideoModel>
+                ) {
+                    data.value = response.body()
+                }
+
+            })
+            return data
+
+        }
+
+
 
 
     }

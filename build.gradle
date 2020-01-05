@@ -5,7 +5,13 @@ buildscript {
     repositories {
         google()
         jcenter()
-        
+
+
+    }
+    allprojects {
+        repositories {
+            maven { url "https://jitpack.io" }
+        }
     }
     ext {
         archLifecycleVersion = '2.2.0-rc02'
@@ -23,7 +29,7 @@ allprojects {
     repositories {
         google()
         jcenter()
-        
+
     }
 }
 

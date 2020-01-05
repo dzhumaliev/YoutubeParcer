@@ -8,4 +8,8 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="DownloadDialog" parent="@style/ThemeOverlay.AppCompat.Dialog">
+        <item name="android:windowBackground">@drawable/download_corner</item>
+    </style>
+
 </resources>
