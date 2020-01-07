@@ -9,7 +9,7 @@ class DownloadMaster  {
     fun downloadFile(
         context: Context,
         url: String,
-//        ext: String?,
+        ext: String?,
         fileName: String?
     ) {
         var request: DownloadManager.Request =

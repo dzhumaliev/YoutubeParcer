@@ -58,7 +58,6 @@ class DetailVideoActivity : AppCompatActivity(), CallBacks.playerCallBack {
     private var formatsToShowList: MutableList<YtVideo?>? = null
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail_video)
@@ -110,8 +109,8 @@ class DetailVideoActivity : AppCompatActivity(), CallBacks.playerCallBack {
                     downloadIds += DownloadMaster().downloadFile(
                         this,
                         fileVideo?.videoFile!!.url,
-                        downloadName + "." + fileVideo?.videoFile!!.format.ext
-//                        downloadName + "." + fileVideo?.audioFile!!.format.ext
+                        downloadName + "." + fileVideo?.videoFile!!.format.ext,
+                        downloadName + "." + fileVideo?.audioFile!!.format.ext
 
                     )
                     downloadIds += "-"
@@ -120,8 +119,8 @@ class DetailVideoActivity : AppCompatActivity(), CallBacks.playerCallBack {
                     downloadIds += DownloadMaster().downloadFile(
                         this,
                         fileVideo?.audioFile!!.url,
-                        downloadName + "." + fileVideo?.audioFile!!.format.ext
-//                        downloadName + "." + fileVideo?.audioFile!!.format.ext
+                        downloadName + "." + fileVideo?.audioFile!!.format.ext,
+                        downloadName + "." + fileVideo?.videoFile!!.format.ext
                     )
                 }
 
@@ -134,7 +133,7 @@ class DetailVideoActivity : AppCompatActivity(), CallBacks.playerCallBack {
 
 
     private fun initDialogAdapter() {
-        dialogAdapter = DownloadDialogAdapter { item: YtVideo -> downloadClickItem(item)}
+        dialogAdapter = DownloadDialogAdapter { item: YtVideo -> downloadClickItem(item) }
         dialogRecyclerView.layoutManager = LinearLayoutManager(applicationContext)
         dialogRecyclerView.adapter = dialogAdapter
     }
@@ -184,9 +183,12 @@ class DetailVideoActivity : AppCompatActivity(), CallBacks.playerCallBack {
     }
 
     @SuppressLint("StaticFieldLeak")
-    private fun actualLink(link : String) {
+    private fun actualLink(link: String) {
         object : YouTubeExtractor(this) {
-            public override fun onExtractionComplete(ytFiles: SparseArray<YtFile>?, vMeta: VideoMeta) {
+            public override fun onExtractionComplete(
+                ytFiles: SparseArray<YtFile>?,
+                vMeta: VideoMeta
+            ) {
 
                 formatsToShowList = mutableListOf()
                 var i = 0
@@ -202,8 +204,8 @@ class DetailVideoActivity : AppCompatActivity(), CallBacks.playerCallBack {
                         i++
                     }
                 }
-                (formatsToShowList)?.sortWith(Comparator {
-                        lhs, rhs -> lhs!!.height - rhs!!.height
+                (formatsToShowList)?.sortWith(Comparator { lhs, rhs ->
+                    lhs!!.height - rhs!!.height
                 })
 
                 val yotutubeUrl: YtVideo? = formatsToShowList?.get(formatsToShowList!!.lastIndex)

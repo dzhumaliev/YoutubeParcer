@@ -43,9 +43,9 @@ class DetailPlaylistAdapter(val function: (ItemsItem) -> Unit) :
 
 
         init {
-            image = itemView.findViewById(R.id.image)
-            title = itemView.findViewById(R.id.title)
-            description = itemView.findViewById(R.id.description)
+            image = itemView.findViewById(R.id.plImage)
+            title = itemView.findViewById(R.id.plTitle)
+            description = itemView.findViewById(R.id.plDescription)
 
 
         }

@@ -23,6 +23,7 @@ class DetailPlayListActivity : AppCompatActivity() {
     private var title: String? = null
     private var description: String? = null
     private var itemCount: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail_play_list)
