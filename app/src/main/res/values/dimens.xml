@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <dimen name="zero_indent">0dp</dimen>
+    <dimen name="toolb_marg_end">64dp</dimen>
+    <dimen name="toolb_marg_start">48dp</dimen>
+    <dimen name="det_playlist_item_size">15sp</dimen>
+
+    <dimen name="normal_indent">16dp</dimen>
+    <dimen name="high_indent">32dp</dimen>
+    <dimen name="zero_indent1">0dp</dimen>
+</resources>
