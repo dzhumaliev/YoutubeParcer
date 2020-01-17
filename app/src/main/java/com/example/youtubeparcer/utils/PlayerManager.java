@@ -1,10 +1,9 @@
 package com.example.youtubeparcer.utils;
 
+
 import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
-
-import androidx.annotation.Nullable;
 
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -27,10 +26,16 @@ import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class PlayerManager {
 
+    /**
+     * declare some usable variable
+     */
     private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
     private static final String TAG = "ExoPlayerManager";
     private static PlayerManager mInstance = null;
@@ -42,6 +47,11 @@ public class PlayerManager {
     CallBacks.playerCallBack listner;
     private SimpleExoPlayer mPlayer;
 
+    /**
+     * private constructor
+     *
+     * @param mContext
+     */
     private PlayerManager(Context mContext) {
 
         TrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory(BANDWIDTH_METER);
@@ -59,10 +69,11 @@ public class PlayerManager {
 
         final MediaSource videoSource = new ExtractorMediaSource.Factory(dataSourceFactory)
                 .createMediaSource(mp4VideoUri);
+
         mPlayer.prepare(videoSource);
         mPlayer.addListener(new Player.EventListener() {
             @Override
-            public void onTimelineChanged(Timeline timeline, @Nullable Object manifest, int reason) {
+            public void onTimelineChanged(Timeline timeline, Object manifest, int reason) {
                 Log.i(TAG, "onTimelineChanged: ");
             }
 
@@ -74,7 +85,6 @@ public class PlayerManager {
             @Override
             public void onLoadingChanged(boolean isLoading) {
                 Log.i(TAG, "onLoadingChanged: ");
-
             }
 
             @Override
@@ -92,7 +102,6 @@ public class PlayerManager {
                 if (playbackState == 4 && listner != null) {
                     listner.onPlayingEnd();
                 }
-
             }
 
             @Override
@@ -103,7 +112,6 @@ public class PlayerManager {
             @Override
             public void onShuffleModeEnabledChanged(boolean shuffleModeEnabled) {
                 Log.i(TAG, "onShuffleModeEnabledChanged: ");
-
             }
 
             @Override
@@ -114,36 +122,36 @@ public class PlayerManager {
             @Override
             public void onPositionDiscontinuity(int reason) {
                 Log.i(TAG, "onPositionDiscontinuity: ");
-
             }
 
             @Override
             public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
                 Log.i(TAG, "onPlaybackParametersChanged: ");
-
             }
 
             @Override
             public void onSeekProcessed() {
                 Log.i(TAG, "onSeekProcessed: ");
-
             }
         });
-
-
     }
 
+    /**
+     * Return ExoPlayerManager instance
+     *
+     * @param mContext
+     * @return
+     */
     public static PlayerManager getSharedInstance(Context mContext) {
         if (mInstance == null) {
             mInstance = new PlayerManager(mContext);
         }
         return mInstance;
-
     }
+
 
     public void setPlayerListener(CallBacks.playerCallBack mPlayerCallBack) {
         listner = mPlayerCallBack;
-
     }
 
     public PlayerView getPlayerView() {
@@ -154,7 +162,7 @@ public class PlayerManager {
         uriString = urlToPlay;
         Uri mp4VideoUri = Uri.parse(uriString);
         MediaSource videoSource;
-
+        // String filenameArray[] = urlToPlay.split("\\.");
         if (uriString.toUpperCase().contains("M3U8")) {
             videoSource = new HlsMediaSource.Factory(dataSourceFactory)
                     .setAllowChunklessPreparation(true)
@@ -162,16 +170,15 @@ public class PlayerManager {
         } else {
             mp4VideoUri = Uri.parse(urlToPlay);
             videoSource = new ExtractorMediaSource.Factory(dataSourceFactory)
-                    .setExtractorsFactory(new DefaultExtractorsFactory()).createMediaSource(mp4VideoUri);
-
+                    .setExtractorsFactory(new DefaultExtractorsFactory()).createMediaSource((mp4VideoUri));
         }
 
 
+        // Prepare the player with the source.
         if (mPlayer != null && videoSource != null) {
             mPlayer.prepare(videoSource);
             mPlayer.setPlayWhenReady(true);
         }
-
 
     }
 
@@ -197,8 +204,29 @@ public class PlayerManager {
         }
     }
 
-    public Boolean isPlayedPlaying() {
+    public Boolean isPlayerPlaying() {
         return mPlayer.getPlayWhenReady();
     }
+
+    public ArrayList<String> readURLs(String url) {
+        if (url == null) return null;
+        ArrayList<String> allURls = new ArrayList<String>();
+        try {
+
+            URL urls = new URL(url);
+            BufferedReader in = new BufferedReader(new InputStreamReader(urls
+                    .openStream()));
+            String str;
+            while ((str = in.readLine()) != null) {
+                allURls.add(str);
+            }
+            in.close();
+            return allURls;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 
 }

@@ -8,23 +8,24 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.youtubeparcer.R
 import com.example.youtubeparcer.model.ItemsItem
-import com.squareup.picasso.Picasso
+import com.example.youtubeparcer.utils.loadImage
 
-class PlaylistAdapter(val function: (ItemsItem) -> Unit) :
-    RecyclerView.Adapter<PlaylistAdapter.YoutubeViewHolder>() {
+class PlaylistAdapter(val function: (ItemsItem) -> Unit) : RecyclerView.Adapter<PlaylistAdapter.YouTubeViewHolder>() {
+
 
     private var list = mutableListOf<ItemsItem>()
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): YoutubeViewHolder {
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): YouTubeViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_youtube_playlist, parent, false)
-        return YoutubeViewHolder(view, function)
+        return YouTubeViewHolder(view, function)
     }
 
     override fun getItemCount(): Int {
         return list.size
     }
 
-    override fun onBindViewHolder(holder: YoutubeViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: YouTubeViewHolder, position: Int) {
         holder.bind(list[position])
     }
 
@@ -34,37 +35,27 @@ class PlaylistAdapter(val function: (ItemsItem) -> Unit) :
     }
 
 
-    class YoutubeViewHolder(itemView: View, val function: (ItemsItem) -> Unit) :
-        RecyclerView.ViewHolder(itemView) {
+    class YouTubeViewHolder(itemView: View, val function: (ItemsItem) -> Unit) : RecyclerView.ViewHolder(itemView) {
 
         private var image: ImageView? = null
         private var title: TextView? = null
         private var description: TextView? = null
 
-
         init {
             image = itemView.findViewById(R.id.plImage)
             title = itemView.findViewById(R.id.plTitle)
             description = itemView.findViewById(R.id.plDescription)
-
-
         }
 
         fun bind(item: ItemsItem) {
-            Picasso
-                .get()
-                .load(item.snippet?.thumbnails?.default?.url)
-                .fit()
-                .centerCrop()
-                .into(image)
+            image?.loadImage(item.snippet?.thumbnails?.default?.url)
 
             title?.text = item.snippet.title
             description?.text = item.contentDetails?.itemCount + " видео"
             itemView.setOnClickListener {
                 function(item)
             }
-
         }
-    }
 
+    }
 }

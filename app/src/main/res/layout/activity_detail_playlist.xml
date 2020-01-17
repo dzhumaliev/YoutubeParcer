@@ -2,10 +2,9 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    style="@style/fullScreen"
     android:background="#fcfcfc"
-    tools:context=".ui.detail_playlist.DetailPlayListActivity">
+    tools:context=".ui.detail_playlist.DetailPlaylistActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
@@ -14,12 +13,11 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            style="@style/fullScreen"
             android:fitsSystemWindows="true"
             app:contentScrim="@color/colorPrimaryDark"
-            app:expandedTitleMarginEnd="64dp"
-            app:expandedTitleMarginStart="48dp"
+            app:expandedTitleMarginEnd="@dimen/toolb_marg_end"
+            app:expandedTitleMarginStart="@dimen/toolb_marg_start"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <androidx.appcompat.widget.Toolbar
@@ -38,44 +36,24 @@
 
                 <TextView
                     android:id="@+id/tv_title"
+                    style="@style/detPlaylistTitle"
                     android:layout_width="328dp"
                     android:layout_height="60dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginTop="24dp"
-                    android:layout_marginRight="16dp"
                     android:text="@string/exemple_title"
-                    android:textSize="24sp"
-                    android:textStyle="bold"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <ImageView
-                    android:id="@+id/tv_image"
-                    android:layout_width="match_parent"
-                    android:layout_height="150dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginTop="24dp"
-                    android:layout_marginBottom="16dp"
-                    android:minWidth="150dp"
-                    android:minHeight="90dp"
-                    android:padding="2dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_title"
-                    app:layout_goneMarginTop="16dp" />
 
                 <TextView
                     android:id="@+id/tv_item_count"
                     android:layout_width="100dp"
                     android:layout_height="20dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginRight="20dp"
-                    android:text="0 видео"
-                    android:textSize="15sp"
+                    style="@style/detPlaylistItem"
+                    android:text="@string/zero_video"
+                    android:textSize="@dimen/det_playlist_item_size"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_image" />
+                    app:layout_constraintTop_toBottomOf="@id/tv_title" />
 
 
                 <!--                <com.google.android.material.floatingactionbutton.FloatingActionButton-->
@@ -98,8 +76,7 @@
 
 
     <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        style="@style/fullScreen"
         android:fitsSystemWindows="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
@@ -110,9 +87,7 @@
         <!--            android:src="@drawable/play_button"-->
         <!--            app:layout_anchor="@id/app_bar"-->
         <!--            app:layout_anchorGravity="bottom|right|end"/>-->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        <LinearLayout style="@style/fullScreen">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@id/recycler_view"

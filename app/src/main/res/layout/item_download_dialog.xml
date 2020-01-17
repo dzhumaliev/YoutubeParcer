@@ -7,12 +7,11 @@
 
     <RadioButton
         android:id="@+id/radio_button"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        style="@style/fullScreen"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="video quality" />
+        tools:text="@string/video_quality" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

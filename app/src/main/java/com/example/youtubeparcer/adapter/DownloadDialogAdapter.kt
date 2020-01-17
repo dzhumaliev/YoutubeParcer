@@ -1,6 +1,5 @@
 package com.example.youtubeparcer.adapter
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +7,7 @@ import android.widget.RadioButton
 import androidx.recyclerview.widget.RecyclerView
 import com.example.youtubeparcer.R
 import com.example.youtubeparcer.model.YtVideo
+
 
 class DownloadDialogAdapter(val function: (YtVideo) -> Unit) :
     RecyclerView.Adapter<DownloadDialogAdapter.YouTubeViewHolder>() {
@@ -25,7 +25,6 @@ class DownloadDialogAdapter(val function: (YtVideo) -> Unit) :
         return list.size
     }
 
-    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: YouTubeViewHolder, position: Int) {
         val model = list[position]
         holder.radioButton?.isChecked = model.isSelected

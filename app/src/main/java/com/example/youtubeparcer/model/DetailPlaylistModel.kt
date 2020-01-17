@@ -1,16 +1,26 @@
 package com.example.youtubeparcer.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import androidx.room.TypeConverters
+import com.example.youtubeparcer.type_converters.PlaylistModelTypeConverter
 import com.google.gson.annotations.SerializedName
 
+@Entity(tableName = "detail_playlist")
+//Во первых добавил Энтити и Type cpnverter + указали Primary Key
+
+
+
+@TypeConverters(PlaylistModelTypeConverter::class)
 data class DetailPlaylistModel(
     @SerializedName("kind")
-    var kind: String,
+    val kind: String,
     @SerializedName("pageInfo")
-    var pageInfo: PageInfo,
+    val pageInfo: PageInfo,
     @SerializedName("etag")
-    var etag: String,
+    @PrimaryKey
+    val etag: String,
     @SerializedName("items")
-    var items: List<ItemsItem>
-
+    val items: List<ItemsItem>
 
 )

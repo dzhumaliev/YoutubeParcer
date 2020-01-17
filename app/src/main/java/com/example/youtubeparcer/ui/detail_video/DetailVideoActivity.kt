@@ -1,12 +1,18 @@
 package com.example.youtubeparcer.ui.detail_video
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.pm.PackageManager
 import android.content.res.Configuration
+import android.media.MediaPlayer
+import android.os.Build
 import android.os.Bundle
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.util.SparseArray
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -22,12 +28,14 @@ import com.example.youtubeparcer.adapter.DownloadDialogAdapter
 import com.example.youtubeparcer.adapter.PlaylistAdapter
 import com.example.youtubeparcer.model.DetailVideoModel
 import com.example.youtubeparcer.model.YtVideo
-import com.example.youtubeparcer.ui.DetailVideoViewModel
 import com.example.youtubeparcer.utils.CallBacks
 import com.example.youtubeparcer.utils.DownloadMaster
 import com.example.youtubeparcer.utils.PlayerManager
 import com.google.android.exoplayer2.Player
 import kotlinx.android.synthetic.main.activity_detail_video.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 class DetailVideoActivity : AppCompatActivity(), CallBacks.playerCallBack {
@@ -35,6 +43,8 @@ class DetailVideoActivity : AppCompatActivity(), CallBacks.playerCallBack {
 
     private var viewModel: DetailVideoViewModel? = null
     private var adapter: PlaylistAdapter? = null
+
+    private lateinit var mediaPlayer: MediaPlayer
 
     private var videoId: String? = null
     private var playlistId: String? = null
@@ -54,7 +64,6 @@ class DetailVideoActivity : AppCompatActivity(), CallBacks.playerCallBack {
     private lateinit var dialogRecyclerView: RecyclerView
 
     private lateinit var dialogAdapter: DownloadDialogAdapter
-
     private var formatsToShowList: MutableList<YtVideo?>? = null
 
 
@@ -67,7 +76,9 @@ class DetailVideoActivity : AppCompatActivity(), CallBacks.playerCallBack {
         player = playerManager.playerView.player
         getExtra()
         setupViews()
+        getDetailVideoPlaylistData()
         fetchDetailVideo()
+
     }
 
     private fun getExtra() {
@@ -76,7 +87,7 @@ class DetailVideoActivity : AppCompatActivity(), CallBacks.playerCallBack {
     }
 
     private fun setupViews() {
-        vd_button.setOnClickListener {
+        btn_download.setOnClickListener {
             checkRequestPermission()
             showDownloadDialog()
         }
@@ -110,7 +121,7 @@ class DetailVideoActivity : AppCompatActivity(), CallBacks.playerCallBack {
                         this,
                         fileVideo?.videoFile!!.url,
                         downloadName + "." + fileVideo?.videoFile!!.format.ext,
-                        downloadName + "." + fileVideo?.audioFile!!.format.ext
+                        downloadName + "." + fileVideo?.videoFile!!.format.ext
 
                     )
                     downloadIds += "-"
@@ -118,8 +129,8 @@ class DetailVideoActivity : AppCompatActivity(), CallBacks.playerCallBack {
                 if (fileVideo?.audioFile != null) {
                     downloadIds += DownloadMaster().downloadFile(
                         this,
-                        fileVideo?.audioFile!!.url,
-                        downloadName + "." + fileVideo?.audioFile!!.format.ext,
+                        fileVideo?.videoFile!!.url,
+                        downloadName + "." + fileVideo?.videoFile!!.format.ext,
                         downloadName + "." + fileVideo?.videoFile!!.format.ext
                     )
                 }
@@ -173,6 +184,24 @@ class DetailVideoActivity : AppCompatActivity(), CallBacks.playerCallBack {
         })
     }
 
+    private fun fetchDetailVideoListForDb() {
+        val data = videoId?.let { viewModel?.getVideoData(it) }
+        data?.observe(this, Observer<DetailVideoModel> {
+            val model: DetailVideoModel? = data.value
+            when {
+                model != null -> {
+                    setData(model)
+                    insertInDbVideo(model)
+                }
+            }
+        })
+    }
+
+
+    private fun insertInDbVideo(model: DetailVideoModel) {
+        viewModel!!.insertDetailVideoList(model)
+    }
+
     private fun setData(model: DetailVideoModel) {
         vd_title.text = model.items?.get(0)?.snippet?.title
         fileName = model.items?.get(0)?.snippet?.title
@@ -180,6 +209,12 @@ class DetailVideoActivity : AppCompatActivity(), CallBacks.playerCallBack {
         val link = model.items?.get(0)?.id.toString()
         actualLink(link)
 
+    }
+
+    private fun setDataForDb(model: DetailVideoModel) {
+        vd_title.text = model.items?.get(0)?.snippet?.title
+        fileName = model.items?.get(0)?.snippet?.title
+        vd_description.text = model.items?.get(0)?.snippet?.description
     }
 
     @SuppressLint("StaticFieldLeak")
@@ -207,15 +242,40 @@ class DetailVideoActivity : AppCompatActivity(), CallBacks.playerCallBack {
                 (formatsToShowList)?.sortWith(Comparator { lhs, rhs ->
                     lhs!!.height - rhs!!.height
                 })
-
-                val yotutubeUrl: YtVideo? = formatsToShowList?.get(formatsToShowList!!.lastIndex)
-                if (yotutubeUrl?.videoFile?.url != null) {
-                    playVideo(yotutubeUrl.videoFile?.url!!)
+                try {
+                    val yotutubeUrl: YtVideo? =
+                        formatsToShowList?.get(formatsToShowList!!.lastIndex - 1)
+                    playVideo(yotutubeUrl!!.videoFile?.url!!)
+                } catch (e: Exception) {
+                    Toast.makeText(this@DetailVideoActivity, "Error", Toast.LENGTH_SHORT).show()
+                    makeVibrate()
+                    customAudio()
+                    finish()
                 }
+
             }
         }.extract(link, true, true)
     }
 
+    fun customAudio() {
+        val mediaPlayer = MediaPlayer.create(this, R.raw.ring1)
+        mediaPlayer.start()
+
+    }
+
+    fun makeVibrate() {
+        val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        if (Build.VERSION.SDK_INT >= 26) {
+            vibrator.vibrate(
+                VibrationEffect.createOneShot(
+                    700,
+                    VibrationEffect.DEFAULT_AMPLITUDE
+                )
+            )
+        } else {
+            vibrator.vibrate(900)
+        }
+    }
 
     private fun addFormatToList(ytFile: YtFile, ytFiles: SparseArray<YtFile>) {
         val height = ytFile.format.height
@@ -266,5 +326,27 @@ class DetailVideoActivity : AppCompatActivity(), CallBacks.playerCallBack {
 
         }
     }
-}
 
+    private fun getDetailVideoPlaylistData() {   //в четвертых добавили это
+        CoroutineScope(Dispatchers.Main).launch {
+            val model = viewModel?.getDetailVideoList()
+            if (model != null && !model.isNullOrEmpty()) {
+                getExtraDetailVideoPlaylistData(model)
+            } else {
+                fetchDetailVideoListForDb()
+            }
+        }
+    }
+
+    private fun getExtraDetailVideoPlaylistData(model: List<DetailVideoModel>) {
+        var detailVideo: DetailVideoModel? = null
+        for (i in 0 until model.size) {
+            for (z in 0 until model[i].items!!.size) {
+                detailVideo = model[i]
+            }
+        }
+
+        if (detailVideo != null) setDataForDb(detailVideo)
+        else fetchDetailVideoListForDb()
+    }
+}

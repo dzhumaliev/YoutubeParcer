@@ -12,4 +12,49 @@
         <item name="android:windowBackground">@drawable/download_corner</item>
     </style>
 
+    <style name="fullScreen">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <style name="detPlaylistTitle">
+        <item name="android:layout_marginLeft">16dp</item>
+        <item name="android:layout_marginTop">24dp</item>
+        <item name="android:layout_marginRight">16dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">24sp</item>
+
+    </style>
+
+    <style name="detPlaylistImage">
+        <item name="android:layout_marginLeft">16dp</item>
+        <item name="android:layout_marginTop">24dp</item>
+        <item name="android:layout_marginRight">16dp</item>
+        <item name="android:layout_marginEnd">16dp</item>
+        <item name="android:minWidth">150dp</item>
+        <item name="android:minHeight">90dp</item>
+        <item name="android:padding">2dp</item>
+    </style>
+
+    <style name="detPlaylistItem">
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:layout_marginEnd">20dp</item>
+
+    </style>
+
+    <style name="gravity_center">
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="button" >
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/normal_indent</item>
+        <item name="android:layout_marginStart">@dimen/normal_indent</item>
+        <item name="android:layout_marginEnd">@dimen/normal_indent</item>
+        <item name="android:background">@drawable/ic_standard_button</item>
+
+    </style>
+
+
 </resources>

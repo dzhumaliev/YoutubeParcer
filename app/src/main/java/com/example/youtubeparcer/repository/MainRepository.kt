@@ -17,21 +17,21 @@ class MainRepository {
 
     companion object {
 
-        val channel = "UCwanaxV4AvAw-I59Z_7o6Aw"
+        val channel = "UCCmFDKAKbiTJg9NWsGk5nEA"
         val apiKey = "AIzaSyCWK-EoCHecYMMFAvl-DI5iegR9s1WW20Y"
         val part = "snippet,contentDetails"
         val maxResult = "50"
-
 
         private lateinit var apiService: YoutubeApi
         fun fetchYoutubePlaylistData(): LiveData<PlaylistModel> {
             apiService = RetrofitClient.create()
             val data = MutableLiveData<PlaylistModel>()
 
-            apiService.getPlayLists(part, apiKey, channel, maxResult).enqueue(object :
+            apiService.getPlaylists(part, apiKey, channel, maxResult).enqueue(object :
                 Callback<PlaylistModel> {
                 override fun onFailure(call: Call<PlaylistModel>, t: Throwable) {
                     data.value = null
+                    Log.v("TAG", t.message)
                 }
 
                 override fun onResponse(
@@ -40,34 +40,36 @@ class MainRepository {
                 ) {
                     data.value = response.body()
                 }
+
             })
+
             return data
         }
+
 
         fun fetchYoutubeDetailPlaylistData(playlistId: String): LiveData<DetailPlaylistModel>? {
             apiService = RetrofitClient.create()
             val data = MutableLiveData<DetailPlaylistModel>()
-            apiService.getDetailPlaylist(part, apiKey, playlistId, maxResult).enqueue(object :
-                Callback<DetailPlaylistModel> {
+            apiService.getDetailPlaylist(part, apiKey, playlistId, maxResult).enqueue(object : Callback<DetailPlaylistModel> {
+
                 override fun onResponse(call: Call<DetailPlaylistModel>, response: Response<DetailPlaylistModel>) {
                     data.value = response.body()
                 }
+
                 override fun onFailure(call: Call<DetailPlaylistModel>, t: Throwable) {
                     Log.v("response_fail", t.message)
                     data.value = null
                 }
 
-
-
             })
-            return data
 
+            return data
         }
+
         fun fetchVideoData(videoId: String): LiveData<DetailVideoModel>? {
             apiService = RetrofitClient.create()
             val data = MutableLiveData<DetailVideoModel>()
-            apiService.getDetailVideo(apiKey, part,videoId).enqueue(object :
-            Callback<DetailVideoModel>{
+            apiService.getDetailVideo(apiKey, part, videoId).enqueue(object : Callback<DetailVideoModel> {
                 override fun onFailure(call: Call<DetailVideoModel>, t: Throwable) {
                     data.value = null
                 }
@@ -80,12 +82,9 @@ class MainRepository {
                 }
 
             })
+
             return data
-
         }
-
-
-
 
     }
 }

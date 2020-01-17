@@ -10,7 +10,7 @@ import retrofit2.http.Query
 interface YoutubeApi {
 
     @GET("youtube/v3/playlists")
-    fun getPlayLists(
+    fun getPlaylists(
         @Query("part") part: String,
         @Query("key") apiKey: String,
         @Query("channelId") channelId: String,
